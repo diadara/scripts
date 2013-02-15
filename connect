@@ -1,0 +1,31 @@
+#!/bin/bash
+# WiFi HotSpot
+
+sudo systemctl stop hostapd
+sudo ifconfig wlan0 down
+sudo iptables -D FORWARD -i wlan0 -j ACCEPT
+sudo iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+sudo ifconfig wlan0 192.168.0.1 netmask 255.255.255.0 up
+sudo sysctl -w net.ipv4.ip_forward=1
+sudo iptables -A FORWARD -i wlan0 -j ACCEPT
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo systemctl start hostapd
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

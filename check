@@ -1,0 +1,11 @@
+#!/bin/bash
+while true;
+ do
+        echo "----------------------------------"
+           date +"%T"
+              aticonfig --od-getclocks
+                 aticonfig --pplib-cmd "get fanspeed 0"
+                    aticonfig --od-gettemperature
+                       echo
+                         sleep  2
+                         done
