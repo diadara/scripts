@@ -1,0 +1,104 @@
+# initially cribbed from the awesome book on tmux by the prags
+# http://pragprog.com/book/bhtmux/tmux
+
+# Setting the prefix from C-b to C-a
+
+# Free the original Ctrl-b prefix keybinding
+unbind C-b
+
+#setting the delay between prefix and command
+set -sg escape-time 1
+set -sg repeat-time 600
+
+# Ensure that we can send Ctrl-A to other apps
+bind C-a send-prefix
+
+# Set the base index for windows to 1 instead of 0
+set -g base-index 1
+
+# Set the base index for panes to 1 instead of 0
+setw -g pane-base-index 1
+
+# Reload the file with Prefix r
+bind r source-file ~/.tmux.conf \; display "Reloaded!"
+
+# splitting panes
+bind | split-window -h
+bind - split-window -v
+
+# moving between panes
+bind -n M-h select-pane -L
+bind -n M-j select-pane -D
+bind -n M-k select-pane -U
+bind -n M-l select-pane -R
+
+# Quick pane selection
+bind -r C-h select-window -t :-
+bind -r C-l select-window -t :+
+
+# Pane resizing
+bind -r H resize-pane -L 5
+bind -r J resize-pane -D 5
+bind -r K resize-pane -U 5
+bind -r L resize-pane -R 5
+
+# mouse support
+setw -g mode-mouse on
+set -g mouse-select-pane on
+set -g mouse-resize-pane on
+set -g mouse-select-window on
+
+# Set the default terminal mode to 256color mode
+set -g default-terminal "screen-256color"
+
+# enable activity alerts
+setw -g monitor-activity on
+set -g visual-activity on
+
+
+# set colors for the active window
+setw -g window-status-current-fg white
+setw -g window-status-current-bg red
+setw -g window-status-current-attr bright
+set -g window-status-activity-attr bold
+
+# pane colors
+set -g pane-border-fg colour245
+set -g pane-border-bg black
+set -g pane-active-border-fg colour39
+set -g pane-active-border-bg black
+
+
+# enable vi keys.
+setw -g mode-keys vi
+
+# Open panes in the same directory using the tmux-panes script
+#unbind v
+#unbind h
+#bind v send-keys " ~/tmux-panes -h" C-m bind h send-keys " ~/tmux-panes -v" C-m
+
+# Maximize and restore a pane
+#unbind Up
+#bind Up new-window -d -n tmp \; swap-pane -s tmp.1 \; select-window -t tmp
+#unbind Down
+#bind Down last-window \; swap-pane -s tmp.1 \; kill-window -t tmp
+
+# Log output to a text file on demand
+#bind P pipe-pane -o "cat >>~/#W.log" \; display "Toggled logging to ~/#W.log"
+
+# copy/paste w/ system clipboard
+#set -g default-command "reattach-to-user-namespace -l /bin/bash"
+bind C-c run "tmux save-buffer - | reattach-to-user-namespace pbcopy"
+bind C-v run "tmux set-buffer $(reattach-to-user-namespace pbpaste); tmux paste-buffer"
+source "/usr/share/tmux/powerline.conf"
+#set -g default-terminal "screen-256color"
+setw -g utf8 on
+set -g status-utf8 on
+set -g prefix C-a
+set -g mode-keys vi
+unbind [
+bind Escape copy-mode
+unbind p
+bind p paste-buffer
+bind -t vi-copy 'v' begin-selection
+bind-key -t vi-copy 'y' copy-selection
